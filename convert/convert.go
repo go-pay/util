@@ -5,48 +5,87 @@ import (
 	"math"
 	"strconv"
 	"strings"
+	"unsafe"
 )
 
-// String2Int 字符串转Int
-// intStr：数字的字符串
+// Deprecated
+// 推荐使用 StringToInt
 func String2Int(intStr string) (intNum int) {
+	return StringToInt(intStr)
+}
+
+// Deprecated
+// 推荐使用 StringToInt64
+func String2Int64(intStr string) (int64Num int64) {
+	return StringToInt64(intStr)
+}
+
+// Deprecated
+// 推荐使用 StringToFloat64
+func String2Float64(floatStr string) (floatNum float64) {
+	return StringToFloat64(floatStr)
+}
+
+// Deprecated
+// 推荐使用 StringToFloat32
+func String2Float32(floatStr string) (floatNum float32) {
+	return StringToFloat32(floatStr)
+}
+
+// Deprecated
+// 推荐使用 IntToString
+func Int2String(intNum int) (intStr string) {
+	return IntToString(intNum)
+}
+
+// Deprecated
+// 推荐使用 Int64ToString
+func Int642String(intNum int64) (int64Str string) {
+	return Int64ToString(intNum)
+}
+
+// =====================================================================================================================
+
+// StringToInt 字符串转Int
+// intStr：数字的字符串
+func StringToInt(intStr string) (intNum int) {
 	intNum, _ = strconv.Atoi(intStr)
 	return
 }
 
-// String2Int64 字符串转Int64
+// StringToInt64 字符串转Int64
 // intStr：数字的字符串
-func String2Int64(intStr string) (int64Num int64) {
+func StringToInt64(intStr string) (int64Num int64) {
 	intNum, _ := strconv.Atoi(intStr)
 	int64Num = int64(intNum)
 	return
 }
 
-// String2Float64 字符串转Float64
+// StringToFloat64 字符串转Float64
 // floatStr：小数点数字的字符串
-func String2Float64(floatStr string) (floatNum float64) {
+func StringToFloat64(floatStr string) (floatNum float64) {
 	floatNum, _ = strconv.ParseFloat(floatStr, 64)
 	return
 }
 
-// String2Float32 字符串转Float32
+// StringToFloat32 字符串转Float32
 // floatStr：小数点数字的字符串
-func String2Float32(floatStr string) (floatNum float32) {
+func StringToFloat32(floatStr string) (floatNum float32) {
 	floatNum64, _ := strconv.ParseFloat(floatStr, 32)
 	floatNum = float32(floatNum64)
 	return
 }
 
-// Int2String Int转字符串
+// IntToString Int转字符串
 // intNum：数字字符串
-func Int2String(intNum int) (intStr string) {
+func IntToString(intNum int) (intStr string) {
 	intStr = strconv.Itoa(intNum)
 	return
 }
 
-// Int642String Int64转字符串
+// Int64ToString Int64转字符串
 // intNum：数字字符串
-func Int642String(intNum int64) (int64Str string) {
+func Int64ToString(intNum int64) (int64Str string) {
 	//10, 代表10进制
 	int64Str = strconv.FormatInt(intNum, 10)
 	return
@@ -82,14 +121,19 @@ func BinaryToDecimal(bit string) (num int) {
 	lens := len(fields)
 	var tempF = 0.0
 	for i := 0; i < lens; i++ {
-		floatNum := String2Float64(fields[i])
+		floatNum := StringToFloat64(fields[i])
 		tempF += floatNum * math.Pow(2, float64(lens-i-1))
 	}
 	num = int(tempF)
 	return
 }
 
-func ToString(v any) (str string) {
+// BytesToString 0 拷贝转换 slice byte 为 string
+func BytesToString(b []byte) (s string) {
+	return *(*string)(unsafe.Pointer(&b))
+}
+
+func AnyToString(v any) (str string) {
 	if v == nil {
 		return ""
 	}
@@ -104,7 +148,7 @@ func ToString(v any) (str string) {
 	return
 }
 
-func ToBytes(v any) (bs []byte) {
+func AnyToBytes(v any) (bs []byte) {
 	if v == nil {
 		return nil
 	}
