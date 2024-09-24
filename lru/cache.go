@@ -1,6 +1,8 @@
 package lru
 
-import "sync"
+import (
+	"sync"
+)
 
 // Entry 缓存中的实体
 type Entry struct {
@@ -57,27 +59,6 @@ func (c *Cache) Get(key string) (v any) {
 }
 
 // moveToHead 将实体移动到链表头部
-//func (c *Cache) moveToHead(e *Entry) {
-//	// 如果条目已经在头部，直接返回
-//	if e == c.head {
-//		return
-//	}
-//	// 将 e 自身从链表中当前位置摘除
-//	// e.pre link e.next(entry or nil)
-//	e.pre.next = e.next
-//	if e == c.tail {
-//		// if e is tail, c.tail = e.pre
-//		c.tail = e.pre
-//	}
-//
-//	// 将 e 自身放入链表头部
-//	c.head.pre = e  // 原头部节点的前指针指向新节点
-//	c.head = e      // 原头部节点替换成新节点
-//	e.next = c.head // 新节点的后指针指向头部节点
-//	e.pre = nil     // 新节点的前指针置空
-//}
-
-// moveToHead 将实体移动到链表头部
 func (c *Cache) moveToHead(e *Entry) {
 	// 如果实体已经在头部，直接返回
 	if e == c.head {
@@ -128,7 +109,7 @@ func (c *Cache) removeTail() {
 		return
 	}
 	// 获取尾部实体
-	removeEntry := c.tail
+	removeEntryKey := c.tail.Key
 	// 将尾部前移
 	c.tail = c.tail.pre
 	// 如果尾部不为空，将尾部的后指针置空
@@ -136,5 +117,5 @@ func (c *Cache) removeTail() {
 		c.tail.next = nil
 	}
 	// 从缓存中删除尾部实体
-	delete(c.cache, removeEntry.Key)
+	delete(c.cache, removeEntryKey)
 }
